@@ -10,7 +10,30 @@
         WindowStyle="ThreeDBorderWindow" BorderThickness="2" 
         BorderBrush="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}"
         Title="Bücherliste" Height="350" Width="820">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-
+        <UniformGrid Grid.Row="0" Rows="1" Columns="2">
+            <Label>Suche nach Titel</Label>
+            <TextBox Text="{Binding Path=FilterText, UpdateSourceTrigger=PropertyChanged}" />
+        </UniformGrid>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Path=Books}" SelectedItem="{Binding Path=SelectedBook}" IsReadOnly="True" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Titel" Binding="{Binding Path=Title}" />
+                <DataGridTextColumn Header="Autoren" Binding="{Binding Path=Authors}" />
+                <DataGridTextColumn Header="Verlag" Binding="{Binding Path=Publishers}" />
+                <DataGridTextColumn Header="ISBN" Binding="{Binding Path=Isbn}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <UniformGrid Grid.Row="2" Rows="0" Columns="3">
+            <Button Command="{Binding Path=CmdNewBook}">Neu</Button>
+            <Button Command="{Binding Path=CmdEditBook}">Bearbeiten</Button>
+            <Button Command="{Binding Path=CmdDeleteBook}">Löschen</Button>
+        </UniformGrid>
+    </Grid>
 </controls:MetroWindow>
 

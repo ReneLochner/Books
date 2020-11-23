@@ -4,48 +4,47 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 
-namespace Books.Wpf.Common
-{
-  public class WindowController : IWindowController
-  {
-    private readonly Dictionary<BaseViewModel, Window> _windows
-      = new Dictionary<BaseViewModel, Window>();
+namespace Books.Wpf.Common {
+    public class WindowController : IWindowController {
+        private readonly Dictionary<BaseViewModel, Window> _windows
+          = new Dictionary<BaseViewModel, Window>();
 
-    public void ShowWindow(BaseViewModel viewModel, bool showAsDialog = false)
-    {
-      Window window = viewModel switch
-      {
-        // Wenn viewModel null ist -> ArgumentNullException
-        null => throw new ArgumentNullException(nameof(viewModel)),
+        public void ShowWindow(BaseViewModel viewModel, bool showAsDialog = false)
+        {
+            Window window = viewModel switch
+            {
+                // Wenn viewModel null ist -> ArgumentNullException
+                null => throw new ArgumentNullException(nameof(viewModel)),
 
-        MainWindowViewModel _ => new MainWindow(),
+                MainWindowViewModel _ => new MainWindow(),
+                BookEditCreateViewModel _ => new BookEditCreateWindow(),
 
-        // default -> InvalidOperationException
-        _ => throw new InvalidOperationException($"Unbekanntes ViewModel '{viewModel}'"),
-      };
+                // default -> InvalidOperationException
+                _ => throw new InvalidOperationException($"Unbekanntes ViewModel '{viewModel}'"),
+            };
 
-      _windows[viewModel] = window;
+            _windows[viewModel] = window;
 
-      window.DataContext = viewModel;
+            window.DataContext = viewModel;
 
-      if (showAsDialog)
-      {
-        window.ShowDialog();
-      }
-      else
-      {
-        window.Show();
-      }
+            if (showAsDialog)
+            {
+                window.ShowDialog();
+            }
+            else
+            {
+                window.Show();
+            }
+        }
+
+        public void CloseWindow(BaseViewModel viewModel)
+        {
+            if (_windows.ContainsKey(viewModel))
+            {
+                Window window = _windows[viewModel];
+                _windows.Remove(viewModel);
+                window.Close();
+            }
+        }
     }
-
-    public void CloseWindow(BaseViewModel viewModel)
-    {
-      if (_windows.ContainsKey(viewModel))
-      {
-        Window window = _windows[viewModel];
-        _windows.Remove(viewModel);
-        window.Close();
-      }
-    }
-  }
 }

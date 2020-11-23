@@ -5,7 +5,7 @@ using Books.Core.DataTransferObjects;
 
 namespace Books.Core.Contracts
 {
-    public interface IAuthorRepository
-    {
+    public interface IAuthorRepository {
+        Task<Author[]> GetAllAuthorsAsync();
     }
 }
